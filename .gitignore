@@ -1,0 +1,34 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Data files
+data/raw/*
+data/processed/*
+
+# Keep empty folders
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Saved models
+models/*.joblib
+models/*.pkl
+
+# Temporary files
+*.tmp
+*.log
