@@ -236,14 +236,12 @@ def main():
     cleaned = create_target(cleaned)
     cleaned = remove_leakage_columns(cleaned)
 
-    # Remove duplicate rows if present
-    cleaned = cleaned.drop_duplicates()
 
     cleaned.to_csv(MODEL_READY_DATA_FILE, index=False)
 
     save_summary(
-        df_before=pd.DataFrame(index=range(rows_before), columns=range(cols_before)),
-        df_after=cleaned,
+    df_before=raw_selected,
+    df_after=cleaned,
     )
 
     print("Data-cleaning pipeline complete.")
