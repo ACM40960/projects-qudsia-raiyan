@@ -27,3 +27,8 @@ RANDOM_STATE = 42
 NOT_PRIORITY_RATINGS = ["A1", "A2", "A3", "B1", "B2"]
 PRIORITY_RATINGS = ["B3", "C1", "C2", "C3", "D1", "D2", "E1", "E2", "F", "G"]
 VALID_RATINGS = NOT_PRIORITY_RATINGS + PRIORITY_RATINGS
+
+#Exploratory data analysis
+EDA_SUMMARY_FILE = RESULTS_TABLES_DIR / "eda_summary.csv"
+BER_RATING_DISTRIBUTION_FILE = RESULTS_TABLES_DIR / "ber_rating_distribution.csv"
+TARGET_DISTRIBUTION_FILE = RESULTS_TABLES_DIR / "target_distribution.csv"
