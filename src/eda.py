@@ -82,8 +82,10 @@ def plot_ber_rating_distribution():
         "F", "G",
     ]
 
+    ratings["EnergyRating"] = ratings["EnergyRating"].astype(str).str.strip()
+
     counts = ratings["EnergyRating"].value_counts()
-    counts = counts.reindex(rating_order).dropna()
+    counts = counts.reindex(rating_order, fill_value=0)
 
     counts.to_csv(RESULTS_TABLES_DIR / "ber_rating_distribution.csv")
 
