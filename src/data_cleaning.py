@@ -150,6 +150,30 @@ def clean_basic_values(df):
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
 
+        # Basic data-quality rules
+    if "year_of_construction" in df.columns:
+        invalid_years = (
+            (df["year_of_construction"] < 1700)
+            | (df["year_of_construction"] > 2023)
+        )
+        df.loc[invalid_years, "year_of_construction"] = pd.NA
+        df["building_age"] = 2023 - df["year_of_construction"]
+
+    # Replace impossible non-positive physical measurements with missing values
+    physical_measurement_columns = [
+        "ground_floor_area",
+        "wall_area",
+        "roof_area",
+        "floor_area",
+        "window_area",
+        "door_area",
+        "volume",
+    ]
+
+    for col in physical_measurement_columns:
+        if col in df.columns:
+            df.loc[df[col] <= 0, col] = pd.NA
+
     return df
 
 

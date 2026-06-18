@@ -2,7 +2,7 @@ metric,value
 rows_before_cleaning,790389.0
 columns_before_cleaning,22.0
 rows_after_cleaning,790389.0
-columns_after_cleaning,22.0
+columns_after_cleaning,23.0
 retrofit_priority_count_0,88172.0
 retrofit_priority_count_1,702217.0
 retrofit_priority_proportion_0,0.11155519623881405
