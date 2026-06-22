@@ -10,7 +10,7 @@ ROC-AUC: 0.9688
 
 Best model by ROC-AUC: Hist Gradient Boosting with ROC-AUC = 0.9688
 
-Best model by priority-class recall: Hist Gradient Boosting with recall = 0.9885
+Best model by priority-class recall: Dummy Baseline with recall = 1.0
 
 Top 10 features by permutation importance:
 1. ground_floor_area

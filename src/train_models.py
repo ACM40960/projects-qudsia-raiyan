@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import joblib
 
 from sklearn.pipeline import Pipeline
+from sklearn.dummy import DummyClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
     accuracy_score,
@@ -79,8 +80,12 @@ def stratified_sample(df, sample_size):
 
 
 def get_models():
-    """Define candidate models."""
+    """Define baseline and candidate machine-learning models."""
     return {
+        "dummy_most_frequent": DummyClassifier(
+            strategy="most_frequent",
+            random_state=RANDOM_STATE,
+        ),
         "logistic_regression": LogisticRegression(
             max_iter=1000,
             class_weight="balanced",

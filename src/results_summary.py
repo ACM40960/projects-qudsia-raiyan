@@ -21,6 +21,7 @@ from config import RESULTS_TABLES_DIR, RESULTS_FIGURES_DIR
 
 MODEL_NAME_MAP = {
     "logistic_regression": "Logistic Regression",
+    "dummy_most_frequent": "Dummy Baseline",
     "decision_tree": "Decision Tree",
     "random_forest": "Random Forest",
     "hist_gradient_boosting": "Hist Gradient Boosting",
