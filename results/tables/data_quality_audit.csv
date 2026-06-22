@@ -1,0 +1,19 @@
+check,affected_values,action
+placeholder_missing_values_in_main_space_heating_fuel,1,Converted placeholder text values to missing values.
+total_placeholder_missing_values,1,"Converted placeholder text values such as nan, NA, None and blank strings to missing values."
+invalid_year_of_construction,4,Set years before 1700 or after 2023 to missing.
+invalid_u_value_wall,0,Set non-positive or unrealistically high U-values above 10 to missing.
+invalid_u_value_roof,86202,Set non-positive or unrealistically high U-values above 10 to missing.
+invalid_u_value_floor,93764,Set non-positive or unrealistically high U-values above 10 to missing.
+invalid_u_value_window,0,Set non-positive or unrealistically high U-values above 10 to missing.
+invalid_u_value_door,80238,Set non-positive or unrealistically high U-values above 10 to missing.
+invalid_ground_floor_area,0,Set non-positive or extremely large ground floor areas above 1000 sq m to missing.
+invalid_wall_area,0,Set negative or extremely large area values above 5000 to missing.
+invalid_roof_area,0,Set negative or extremely large area values above 5000 to missing.
+invalid_floor_area,0,Set negative or extremely large area values above 5000 to missing.
+invalid_window_area,0,Set negative or extremely large area values above 5000 to missing.
+invalid_door_area,0,Set negative or extremely large area values above 5000 to missing.
+invalid_no_storeys,0,Set non-positive or extremely high storey counts above 20 to missing.
+invalid_glazing_percent,1,Set glazing percentages outside the 0 to 100 range to missing.
+invalid_volume,289,Set non-positive or extremely large volume values above 10000 to missing.
+invalid_or_missing_energy_rating,0,Dropped rows without a valid BER rating because target creation requires EnergyRating.

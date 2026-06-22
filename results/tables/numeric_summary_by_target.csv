@@ -1,0 +1,5 @@
+,ground_floor_area,ground_floor_area,ground_floor_area,year_of_construction,year_of_construction,year_of_construction,u_value_wall,u_value_wall,u_value_wall,u_value_roof,u_value_roof,u_value_roof,u_value_floor,u_value_floor,u_value_floor,u_value_window,u_value_window,u_value_window,u_value_door,u_value_door,u_value_door,glazing_percent,glazing_percent,glazing_percent,volume,volume,volume
+,mean,median,std,mean,median,std,mean,median,std,mean,median,std,mean,median,std,mean,median,std,mean,median,std,mean,median,std,mean,median,std
+retrofit_priority,,,,,,,,,,,,,,,,,,,,,,,,,,,
+0,129.543,111.25,64.279,2007.991,2010.0,16.921,0.278,0.24,0.158,0.173,0.15,0.075,0.262,0.22,0.142,1.68,1.42,0.562,2.133,2.1,0.795,0.365,0.231,0.636,627.405,567.748,426.172
+1,109.318,98.34,46.806,1982.108,1994.0,29.69,0.724,0.52,0.595,0.345,0.26,0.292,0.519,0.47,0.171,2.773,2.77,0.675,2.793,3.0,0.502,0.223,0.194,0.264,486.213,447.054,293.439

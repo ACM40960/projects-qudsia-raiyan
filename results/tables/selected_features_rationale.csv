@@ -1,0 +1,23 @@
+feature,decision,feature_type,reason,included_in_model_ready_data
+county_name,kept,categorical,Geographical/contextual variable; not a direct BER output.,True
+dwelling_type,kept,categorical,Physical dwelling category that may influence energy performance.,True
+year_of_construction,kept,numeric,Construction period is strongly linked to building standards and thermal performance.,True
+type_of_rating,kept,categorical,Rating type gives assessment context and is not itself the BER outcome.,True
+ground_floor_area,kept,numeric,Dwelling size affects heat demand and energy performance.,True
+u_value_wall,kept,numeric,Wall U-value measures thermal transmittance and heat-loss performance.,True
+u_value_roof,kept,numeric,Roof U-value measures roof/attic heat-loss performance.,True
+u_value_floor,kept,numeric,Floor U-value measures thermal performance of the floor.,True
+u_value_window,kept,numeric,Window U-value captures glazing heat-loss performance.,True
+u_value_door,kept,numeric,Door U-value captures heat-loss performance through doors.,True
+wall_area,kept,numeric,Building-envelope area affects total heat loss.,True
+roof_area,kept,numeric,Roof area affects potential heat loss through the roof.,True
+floor_area,kept,numeric,Floor area is a physical dwelling-size variable.,True
+window_area,kept,numeric,Window area affects heat loss and solar gain.,True
+door_area,kept,numeric,Door area contributes to envelope heat-loss characteristics.,True
+no_storeys,kept,numeric,Number of storeys describes building form.,True
+main_space_heating_fuel,kept,categorical,Heating fuel type is relevant to energy performance and retrofit need.,True
+main_water_heating_fuel,kept,categorical,Water-heating fuel type is relevant to dwelling energy performance.,True
+thermal_era,kept,categorical,Construction-era grouping helps represent building-standard period.,True
+glazing_percent,kept,numeric,Glazing proportion affects heat loss and building-envelope performance.,True
+volume,kept,numeric,Building volume affects heating demand.,True
+building_age,not used,derived numeric,"Redundant with year_of_construction, so it is not included in the modelling dataset.",False

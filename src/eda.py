@@ -32,6 +32,7 @@ from config import (
     RESULTS_FIGURES_DIR,
     RESULTS_TABLES_DIR,
     PRIORITY_RATINGS,
+    RANDOM_STATE,
 )
 
 
@@ -196,6 +197,68 @@ def save_eda_summary(df):
     missingness = df.isna().mean().sort_values(ascending=False)
     missingness.to_csv(RESULTS_TABLES_DIR / "model_ready_missingness.csv")
 
+def plot_missingness_summary(df, top_n=15):
+    """Plot top missingness rates in the model-ready dataset."""
+    missingness = df.isna().mean().sort_values(ascending=False).head(top_n)
+    missingness.to_csv(RESULTS_TABLES_DIR / "top_missingness_model_ready.csv")
+
+    plt.figure(figsize=(10, 6))
+    missingness.sort_values(ascending=True).plot(kind="barh")
+    plt.title("Top Missingness Rates in Model-Ready Dataset")
+    plt.xlabel("Missing-value proportion")
+    plt.ylabel("Feature")
+    plt.xlim(0, 1)
+    plt.tight_layout()
+    plt.savefig(RESULTS_FIGURES_DIR / "top_missingness_model_ready.png", dpi=300)
+    plt.close()
+
+
+def save_numeric_summary_by_target(df, numeric_columns):
+    """Save mean, median and standard deviation of selected numeric features by target class."""
+    available_columns = [col for col in numeric_columns if col in df.columns]
+
+    summary = (
+        df.groupby("retrofit_priority")[available_columns]
+        .agg(["mean", "median", "std"])
+        .round(3)
+    )
+
+    summary.to_csv(RESULTS_TABLES_DIR / "numeric_summary_by_target.csv")
+
+
+def plot_numeric_by_target_boxplot(df, column, title, output_name):
+    """Save a boxplot of a numeric feature by retrofit-priority class."""
+    if column not in df.columns:
+        print(f"Skipping {column}: column not found.")
+        return
+
+    plot_df = df[[column, "retrofit_priority"]].dropna().copy()
+
+    # Sample for speed and readable plotting.
+    if len(plot_df) > 50_000:
+        plot_df = plot_df.sample(n=50_000, random_state=RANDOM_STATE)
+
+    plot_df["retrofit_priority_label"] = plot_df["retrofit_priority"].map(
+        {
+            0: "Not priority",
+            1: "Priority",
+        }
+    )
+
+    plt.figure(figsize=(8, 6))
+    sns.boxplot(
+        data=plot_df,
+        x="retrofit_priority_label",
+        y=column,
+        showfliers=False,
+    )
+    plt.title(title)
+    plt.xlabel("Retrofit-priority class")
+    plt.ylabel(column)
+    plt.tight_layout()
+    plt.savefig(RESULTS_FIGURES_DIR / f"{output_name}.png", dpi=300)
+    plt.close()
+
 
 def main():
     """Run full EDA script."""
@@ -216,6 +279,57 @@ def main():
 
     plot_ber_rating_distribution()
     plot_target_distribution(df)
+
+    plot_missingness_summary(df, top_n=15)
+
+    key_numeric_columns = [
+        "ground_floor_area",
+        "year_of_construction",
+        "u_value_wall",
+        "u_value_roof",
+        "u_value_floor",
+        "u_value_window",
+        "u_value_door",
+        "glazing_percent",
+        "volume",
+    ]
+
+    save_numeric_summary_by_target(df, key_numeric_columns)
+
+    plot_numeric_by_target_boxplot(
+        df,
+        column="ground_floor_area",
+        title="Ground Floor Area by Retrofit-Priority Class",
+        output_name="ground_floor_area_by_target",
+    )
+
+    plot_numeric_by_target_boxplot(
+        df,
+        column="year_of_construction",
+        title="Year of Construction by Retrofit-Priority Class",
+        output_name="year_of_construction_by_target",
+    )
+
+    plot_numeric_by_target_boxplot(
+        df,
+        column="u_value_window",
+        title="Window U-Value by Retrofit-Priority Class",
+        output_name="u_value_window_by_target",
+    )
+
+    plot_numeric_by_target_boxplot(
+        df,
+        column="u_value_wall",
+        title="Wall U-Value by Retrofit-Priority Class",
+        output_name="u_value_wall_by_target",
+    )
+
+    plot_numeric_by_target_boxplot(
+        df,
+        column="u_value_roof",
+        title="Roof U-Value by Retrofit-Priority Class",
+        output_name="u_value_roof_by_target",
+    )
 
     plot_top_categories(
         df,

@@ -1,0 +1,8 @@
+column_name,decision,reason,available_in_raw_dataset
+EnergyRating,target source only,"Used to define the binary retrofit_priority target, then removed from predictors.",True
+BerRating,dropped,Numerical BER score closely determines the BER band; using it would create target leakage.,True
+CO2Rating,dropped,BER-related assessment output closely linked to dwelling energy performance.,True
+TotalCO2Emissions,dropped,Calculated assessment output; may reveal final BER performance rather than independent dwelling characteristics.,True
+TotalPrimaryEnergyFact,dropped,Calculated energy-performance output; high leakage risk for BER-derived target.,True
+MPCDERValue,dropped,Derived assessment value; high leakage risk.,True
+EPCDERValue,dropped,Derived assessment value; high leakage risk.,False

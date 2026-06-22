@@ -19,6 +19,10 @@ MODEL_READY_DATA_FILE = DATA_PROCESSED_DIR / "ber_model_ready.csv"
 # Output tables
 CLEANING_SUMMARY_FILE = RESULTS_TABLES_DIR / "cleaning_summary.csv"
 MODEL_READY_COLUMNS_FILE = RESULTS_TABLES_DIR / "model_ready_columns.csv"
+DATA_QUALITY_AUDIT_FILE = RESULTS_TABLES_DIR / "data_quality_audit.csv"
+LEAKAGE_AUDIT_FILE = RESULTS_TABLES_DIR / "leakage_audit.csv"
+SELECTED_FEATURES_RATIONALE_FILE = RESULTS_TABLES_DIR / "selected_features_rationale.csv"
+MISSINGNESS_AFTER_CLEANING_FILE = RESULTS_TABLES_DIR / "missingness_after_cleaning.csv"
 
 # Reproducibility
 RANDOM_STATE = 42
