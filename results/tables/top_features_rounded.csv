@@ -1,0 +1,16 @@
+feature,importance_mean,importance_std
+ground_floor_area,0.05525,0.00129
+u_value_window,0.03061,0.00223
+u_value_floor,0.02466,0.0012
+u_value_wall,0.01947,0.00136
+year_of_construction,0.01712,0.00144
+u_value_roof,0.01584,0.00168
+main_water_heating_fuel,0.01457,0.00252
+wall_area,0.0121,0.00261
+main_space_heating_fuel,0.00818,0.0014
+glazing_percent,0.00723,0.00114
+volume,0.00529,0.001
+u_value_door,0.00501,0.00149
+county_name,0.0044,0.00097
+dwelling_type,0.00392,0.00095
+door_area,0.00308,0.00106
