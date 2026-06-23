@@ -42,6 +42,7 @@ The modelling objective is to learn a function:
 ```text
 f(x_i) -> y_i
 ```
+For probabilistic classifiers, the model can also be interpreted as estimating the probability `P(y_i = 1 | x_i)`, where larger values indicate higher predicted retrofit-priority risk.
 
 that predicts whether a dwelling should be classified as retrofit priority based on its observed characteristics.
 
@@ -118,13 +119,6 @@ if BER rating is B3, C1, C2, C3, D1, D2, E1, E2, F, or G
 ```
 
 This means homes worse than BER B2 are treated as retrofit-priority dwellings.
-
-The cleaned modelling dataset contains:
-
-```text
-790,389 rows
-22 columns
-```
 
 Target distribution:
 
@@ -218,7 +212,7 @@ projects-qudsia-raiyan/
 * Git
 * GitHub
 
-No cloud tools such as AWS, Airflow, or SageMaker are required for this project. The project is deployed as a reproducible GitHub workflow that can be run locally from source code.
+No cloud tools such as AWS, Airflow, or SageMaker are required for this project. The project is published as a reproducible GitHub repository with an end-to-end local pipeline.
 
 ---
 
@@ -422,7 +416,7 @@ The best-performing model was:
 Hist Gradient Boosting
 ```
 
-Hist Gradient Boosting was selected as the final model because it achieved the strongest overall performance, with the highest macro F1-score and ROC-AUC among the non-baseline models, while also maintaining very high recall for retrofit-priority dwellings.
+Hist Gradient Boosting was selected as the final model because it achieved the highest macro F1-score and ROC-AUC among the non-baseline models, while also maintaining very high recall for retrofit-priority dwellings. Although Random Forest achieved slightly higher balanced accuracy, Hist Gradient Boosting provided the strongest overall trade-off for this project.
 
 Full model comparison:
 
@@ -683,6 +677,6 @@ University College Dublin
 
 * Ahern, C., Raushan, K., and Essien-Thompson, E. (2024). [*Irish Building Energy Rating Database - (Cleaned 05/10/2023)*](https://data.mendeley.com/datasets/yhgdzfpnym/1). Mendeley Data, Version 1. DOI: [10.17632/yhgdzfpnym.1](https://doi.org/10.17632/yhgdzfpnym.1).
 
-* Ribeiro, M. T., Singh, S., and Guestrin, C. (2016). [“Why Should I Trust You?” Explaining the Predictions of Any Classifier](https://arxiv.org/abs/1602.04938).
+* Ribeiro, M. T., Singh, S., and Guestrin, C. (2016). “Why Should I Trust You?” Explaining the Predictions of Any Classifier. Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining.(https://arxiv.org/abs/1602.04938).
 
-* Lundberg, S. M., and Lee, S. I. (2017). [A Unified Approach to Interpreting Model Predictions](https://arxiv.org/abs/1705.07874).
+* Lundberg, S. M., and Lee, S. I. (2017). A Unified Approach to Interpreting Model Predictions. Advances in Neural Information Processing Systems.(https://arxiv.org/abs/1705.07874).
