@@ -24,6 +24,31 @@ Can Irish BER data be used to predict residential retrofit priority, and can exp
 
 ---
 
+## Mathematical Modelling Formulation
+
+This project is formulated as a supervised binary classification problem.
+
+For each dwelling `i`, the model observes a feature vector `x_i`, which contains physical, geographical, and heating-system characteristics such as dwelling type, county, year of construction, floor area, U-values, heating fuel, glazing percentage, and building-envelope areas.
+
+The response variable is:
+
+```text
+y_i = 1 if the dwelling is retrofit priority
+y_i = 0 otherwise
+```
+
+The modelling objective is to learn a function:
+
+```text
+f(x_i) -> y_i
+```
+
+that predicts whether a dwelling should be classified as retrofit priority based on its observed characteristics.
+
+The problem is evaluated on a held-out test set using accuracy, balanced accuracy, macro F1-score, ROC-AUC, precision, recall, and confusion matrices. Because the target variable is imbalanced, balanced accuracy and macro F1-score are treated as more informative than accuracy alone.
+
+---
+
 ## Motivation
 
 Residential energy efficiency is an important part of Ireland’s sustainability and climate-transition agenda. Many Irish homes differ in construction age, dwelling type, floor area, insulation quality, heating systems, glazing, and energy performance.
@@ -36,21 +61,23 @@ This project uses machine learning to predict retrofit-priority status and expla
 
 ## Dataset
 
-The project uses a cleaned Irish Building Energy Rating dataset.
+The project uses the cleaned Irish Building Energy Rating dataset:
 
-**Dataset used locally:**
+**Ahern, C., Raushan, K., and Essien-Thompson, E. (2024). *Irish Building Energy Rating Database - (Cleaned 05/10/2023)*. Mendeley Data, Version 1. DOI: 10.17632/yhgdzfpnym.1**
+
+The dataset contains a cleaned pull from the Irish BER database dated 5 October 2023. The file used locally in this project is:
 
 ```text
 BER (filtered and cleaned 20231005).csv
 ```
 
-For coding convenience, the file was renamed locally as:
+For coding consistency, the dataset file should be renamed locally as:
 
 ```text
 ber_cleaned_20231005.csv
 ```
 
-The raw dataset is not included in this GitHub repository because of file size and reproducibility practice. To run the project, the dataset must be downloaded separately and placed in:
+The raw dataset is not included in this GitHub repository because it is large. To reproduce the project, download the dataset separately from Mendeley Data and place it at:
 
 ```text
 data/raw/ber_cleaned_20231005.csv
@@ -64,6 +91,12 @@ data/processed/ber_model_ready.csv
 
 Both raw and processed data files are excluded from version control using `.gitignore`.
 
+After cleaning and target creation, the model-ready dataset contains:
+
+```text
+790,389 rows
+22 columns
+```
 ---
 
 ## Target Definition
@@ -152,7 +185,7 @@ projects-qudsia-raiyan/
 │   └── 01_data_inspection.ipynb
 │
 ├── reports/
-│   └── ACM40960_Literature_Review_Raiyan_Qudsia.pdf
+│   └── Literature_Review.pdf
 │
 ├── results/
 │   ├── figures/
@@ -389,6 +422,18 @@ The best-performing model was:
 Hist Gradient Boosting
 ```
 
+Hist Gradient Boosting was selected as the final model because it achieved the strongest overall performance, with the highest macro F1-score and ROC-AUC among the non-baseline models, while also maintaining very high recall for retrofit-priority dwellings.
+
+Full model comparison:
+
+| Model                  | Accuracy | Balanced Accuracy | Priority Recall | Macro F1-score | ROC-AUC |
+| ---------------------- | -------: | ----------------: | --------------: | -------------: | ------: |
+| Dummy Baseline         |   0.8884 |            0.5000 |          1.0000 |         0.4705 |  0.5000 |
+| Logistic Regression    |   0.8896 |            0.8820 |          0.8917 |         0.7864 |  0.9564 |
+| Decision Tree          |   0.9112 |            0.8718 |          0.9224 |         0.8110 |  0.9000 |
+| Random Forest          |   0.9556 |            0.8748 |          0.9787 |         0.8849 |  0.9667 |
+| Hist Gradient Boosting |   0.9586 |            0.8544 |          0.9885 |         0.8859 |  0.9688 |
+
 Final best-model performance:
 
 | Metric                      |  Value |
@@ -401,16 +446,9 @@ Final best-model performance:
 | Macro F1-score              | 0.8859 |
 | ROC-AUC                     | 0.9688 |
 
-The dummy majority-class baseline achieved:
+The dummy majority-class baseline achieved high accuracy because most dwellings in the dataset are labelled as retrofit priority. However, its balanced accuracy and ROC-AUC are both 0.5000, showing that it has no real discrimination ability. This demonstrates why accuracy alone is misleading for this imbalanced classification task.
 
-| Metric            |  Value |
-| ----------------- | -----: |
-| Accuracy          | 0.8884 |
-| Balanced accuracy | 0.5000 |
-| Macro F1-score    | 0.4705 |
-| ROC-AUC           | 0.5000 |
-
-This shows that the machine-learning models learn meaningful structure beyond simply predicting the majority class.
+The machine-learning models substantially improve balanced accuracy, macro F1-score, and ROC-AUC compared with the dummy baseline. This suggests that the models learn meaningful relationships between dwelling characteristics and retrofit-priority status.
 
 ### Model Comparison by Macro F1-Score
 
@@ -424,6 +462,7 @@ This shows that the machine-learning models learn meaningful structure beyond si
 
 ![Model Comparison Priority Recall](results/figures/model_comparison_priority_recall.png)
 
+
 ---
 
 ## Explainability Analysis
@@ -436,29 +475,30 @@ src/explainability.py
 
 Permutation importance was used to identify which original dwelling features most influenced model performance.
 
+Permutation importance measures how much the model performance decreases when the values of one feature are randomly shuffled. If shuffling a feature causes a large drop in performance, the model is relying strongly on that feature.
+
+This method was chosen because it is model-agnostic and can be applied to the final trained pipeline without needing to inspect model-specific internal parameters.
+
 Top 10 features by permutation importance:
 
-1. `ground_floor_area`
-2. `u_value_window`
-3. `year_of_construction`
-4. `u_value_wall`
-5. `main_water_heating_fuel`
-6. `u_value_roof`
-7. `wall_area`
-8. `u_value_floor`
-9. `dwelling_type`
-10. `floor_area`
+| Rank | Feature                   | Interpretation                                                                                  |
+| ---: | ------------------------- | ----------------------------------------------------------------------------------------------- |
+|    1 | `ground_floor_area`       | Larger or smaller dwelling size affects heating demand and energy performance.                  |
+|    2 | `u_value_window`          | Window thermal transmittance affects heat loss through glazing.                                 |
+|    3 | `year_of_construction`    | Construction period is linked to building standards and insulation quality.                     |
+|    4 | `u_value_wall`            | Wall thermal performance affects heat loss through the building envelope.                       |
+|    5 | `main_water_heating_fuel` | Water-heating fuel type is related to energy-system efficiency.                                 |
+|    6 | `u_value_roof`            | Roof thermal performance affects heat loss through the roof or attic.                           |
+|    7 | `wall_area`               | Larger wall area can increase total envelope heat loss.                                         |
+|    8 | `u_value_floor`           | Floor thermal performance affects heat loss through floors.                                     |
+|    9 | `dwelling_type`           | Detached, semi-detached, apartment, and other dwelling types have different heat-loss patterns. |
+|   10 | `floor_area`              | Floor area represents building size and contributes to energy-demand differences.               |
 
-These features are physically meaningful because they relate to:
+These features are physically meaningful because they relate to dwelling size, construction age, heat loss through the building envelope, heating systems, and dwelling form.
 
-* dwelling size;
-* heat loss through windows, walls, roofs, and floors;
-* construction age;
-* heating and water-heating fuel type;
-* building-envelope area;
-* dwelling type.
+This supports the interpretability of the model because the strongest predictors are consistent with building-energy principles rather than arbitrary or unexplained variables.
 
-This supports the interpretability of the model because the strongest predictors are consistent with building-energy principles.
+A limitation of permutation importance is that correlated features can share importance. Therefore, the results should be interpreted as evidence of model reliance, not as proof of direct causal effects.
 
 ### Permutation Importance
 
@@ -478,6 +518,20 @@ The explainability analysis showed that the most influential features are relate
 
 ## How to Run the Project
 
+This project was developed using:
+
+```text
+Python 3.13.5
+```
+
+The Python dependencies are listed in:
+
+```text
+requirements.txt
+```
+
+The main packages used are `pandas`, `numpy`, `scikit-learn`, `matplotlib`, `seaborn`, `jupyter`, `joblib`, and `openpyxl`.
+
 ### 1. Clone the repository
 
 ```bash
@@ -488,16 +542,24 @@ cd projects-qudsia-raiyan
 ### 2. Install requirements
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
-### 3. Add raw dataset
+### 3. Add the raw dataset
 
-Download the cleaned BER dataset and place it in:
+Download the cleaned BER dataset from Mendeley Data and rename the file to:
+
+```text
+ber_cleaned_20231005.csv
+```
+
+Place it in:
 
 ```text
 data/raw/ber_cleaned_20231005.csv
 ```
+
+The raw dataset is not committed to this repository because it is large.
 
 ### 4. Run the full pipeline
 
@@ -505,7 +567,7 @@ data/raw/ber_cleaned_20231005.csv
 python src/run_pipeline.py
 ```
 
-This executes:
+This command runs the complete project workflow:
 
 ```text
 data cleaning
@@ -515,6 +577,8 @@ final model evaluation
 explainability analysis
 results summary
 ```
+
+The final processed dataset, trained model, figures, and result tables are generated locally.
 
 ### Optional: Run each stage separately
 
@@ -553,6 +617,12 @@ results/tables/key_results_summary.txt
 ```text
 results/figures/ber_rating_distribution.png
 results/figures/target_distribution.png
+results/figures/top_missingness_model_ready.png
+results/figures/ground_floor_area_by_target.png
+results/figures/year_of_construction_by_target.png
+results/figures/u_value_window_by_target.png
+results/figures/u_value_wall_by_target.png
+results/figures/u_value_roof_by_target.png
 results/figures/model_comparison_macro_f1.png
 results/figures/model_comparison_roc_auc.png
 results/figures/model_comparison_priority_recall.png
@@ -607,8 +677,12 @@ University College Dublin
 
 ## References
 
-* Sustainable Energy Authority of Ireland. Building Energy Rating information and BER Research Tool.
-* Government of Ireland. National Retrofit Plan.
-* Mendeley Data. Irish Building Energy Rating Database — Cleaned 05/10/2023.
-* Ribeiro, M. T., Singh, S., and Guestrin, C. (2016). “Why Should I Trust You?” Explaining the Predictions of Any Classifier.
-* Lundberg, S. M., and Lee, S. I. (2017). A Unified Approach to Interpreting Model Predictions.
+* Sustainable Energy Authority of Ireland. [Building Energy Rating information](https://www.seai.ie/ber) and [BER Research Tool](https://ndber.seai.ie/BERResearchTool/ber/search.aspx).
+
+* Government of Ireland. [National Retrofit Plan](https://www.gov.ie/en/department-of-climate-energy-and-the-environment/publications/national-retrofit-plan/).
+
+* Ahern, C., Raushan, K., and Essien-Thompson, E. (2024). [*Irish Building Energy Rating Database - (Cleaned 05/10/2023)*](https://data.mendeley.com/datasets/yhgdzfpnym/1). Mendeley Data, Version 1. DOI: [10.17632/yhgdzfpnym.1](https://doi.org/10.17632/yhgdzfpnym.1).
+
+* Ribeiro, M. T., Singh, S., and Guestrin, C. (2016). [“Why Should I Trust You?” Explaining the Predictions of Any Classifier](https://arxiv.org/abs/1602.04938).
+
+* Lundberg, S. M., and Lee, S. I. (2017). [A Unified Approach to Interpreting Model Predictions](https://arxiv.org/abs/1705.07874).
